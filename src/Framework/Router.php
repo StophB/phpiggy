@@ -15,7 +15,7 @@ class Router
         $this->routes[] = [
             'path' => $path,
             'method' => strtoupper($method),
-            'controller' => $controller,
+            'controller' => $controller
         ];
     }
 
@@ -24,7 +24,6 @@ class Router
         $path = trim($path, '/');
         $path = "/{$path}/";
         $path = preg_replace('#[/]{2,}#', '/', $path);
-
 
         return $path;
     }
@@ -36,15 +35,16 @@ class Router
 
         foreach ($this->routes as $route) {
             if (
-                preg_match("#^{$route['path']}$#", $path) ||
+                !preg_match("#^{$route['path']}$#", $path) ||
                 $route['method'] !== $method
             ) {
                 continue;
             }
+
             [$class, $function] = $route['controller'];
 
             $controllerInstance = new $class;
-      
+
             $controllerInstance->{$function}();
         }
     }
